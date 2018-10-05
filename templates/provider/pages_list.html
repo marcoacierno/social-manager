@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} {% endblock %}
+
+{% block breadcrumbs %}{{ block.super }} {% endblock %}
+
+{% block content %}
+{% for page in pages %}
+<form method="post" id="form-of-{{page.id}}">
+    {% csrf_token %}
+    <input type="hidden" name="page_id" value="{{page.id}}" />
+    <input type="hidden" name="page_access_token" value="{{page.access_token}}" />
+</form>
+{% endfor %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Is Active page?</th>
+            <th>Use this page?</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages %}
+        <tr>
+            <td>{{page.id}}</td>
+            <td>{{page.name}}</td>
+            <td>
+                {% if page.id == active_page.id %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+            <td>
+                <input form="form-of-{{page.id}}" type="submit" value="Set as active page" />
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
