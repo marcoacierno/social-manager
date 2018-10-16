@@ -8,6 +8,8 @@ django = "*"
 django-environ = "*"
 facebook-sdk = "*"
 django-constance = {version = "*", extras = ["database"]}
+"psycopg2-binary" = "*"
+django-model-utils = "*"
 
 [dev-packages]
 black = "*"

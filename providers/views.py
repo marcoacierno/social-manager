@@ -16,7 +16,7 @@ def provider_pages_index(request, slug):
         else:
             messages.success(request, "Changed!")
 
-        return redirect(reverse("provider-index", args=[slug]))
+        return redirect(reverse("admin:index"))
 
     context = {"pages": provider.pages, "active_page": provider.active_page}
 

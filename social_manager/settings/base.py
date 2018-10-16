@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "providers",
+    "posts",
     "socialadmin.apps.SocialAdminConfig",
     "constance",
     "constance.backends.database",

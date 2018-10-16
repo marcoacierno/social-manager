@@ -45,6 +45,22 @@ class FacebookProvider(Provider):
             "access_token": config.FACEBOOK_ACTIVE_PAGE_ACCESS_TOKEN,
         }
 
+    def publish_post(self, post):
+        if not config.FACEBOOK_ACTIVE_PAGE_ID:
+            return False
+
+        from posts.models import Metadata
+
+        graph = get_graph_client(True)
+        result = graph.put_object(
+            config.FACEBOOK_ACTIVE_PAGE_ID, "feed", message=post.content
+        )
+
+        Metadata.objects.create(
+            post=post, remote_id=result["id"], provider_name=self.NAMESPACE
+        )
+        return result
+
     def set_active_page(self, **kwargs):
         id = kwargs["page_id"][0]
         access_token = kwargs["page_access_token"][0]
@@ -79,9 +95,11 @@ class FacebookProvider(Provider):
         )
 
         config.FACEBOOK_ACCESS_TOKEN = access_token_data["access_token"]
-        config.FACEBOOK_ACCESS_TOKEN_EXPIRES_AT = datetime.now() + timedelta(
-            seconds=access_token_data["expires_in"]
-        )
+
+        if "expires_in" in access_token_data:
+            config.FACEBOOK_ACCESS_TOKEN_EXPIRES_AT = datetime.now() + timedelta(
+                seconds=access_token_data["expires_in"]
+            )
 
         messages.success(request, "Facebook access token set correctly!")
         return redirect(reverse("admin:index"))
@@ -90,6 +108,11 @@ class FacebookProvider(Provider):
         return request.build_absolute_uri(reverse("facebook:redirect"))
 
 
-def get_graph_client():
-    graph = facebook.GraphAPI(access_token=config.FACEBOOK_ACCESS_TOKEN, version="3.0")
+def get_graph_client(page_token=False):
+    access_token = (
+        config.FACEBOOK_ACCESS_TOKEN
+        if not page_token
+        else config.FACEBOOK_ACTIVE_PAGE_ACCESS_TOKEN
+    )
+    graph = facebook.GraphAPI(access_token=access_token, version="3.0")
     return graph

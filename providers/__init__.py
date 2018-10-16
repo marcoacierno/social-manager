@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from .facebook import FacebookProvider
 from .provider import Provider
@@ -19,3 +19,7 @@ def get_provider(namespace: str) -> Provider:
         PROVIDERS_INSTANCES[namespace] = PROVIDERS[namespace]()
 
     return PROVIDERS_INSTANCES[namespace]
+
+
+def get_all_providers() -> List[Provider]:
+    return [get_provider(provider) for provider in PROVIDERS]
