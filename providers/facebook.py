@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 import facebook
 from constance import config
-from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -72,9 +71,9 @@ class FacebookProvider(Provider):
     def authenticate(self, request):
         graph = get_graph_client()
         fb_login_url = graph.get_auth_url(
-            settings.PROVIDERS["FACEBOOK"]["APP_ID"],
+            self.settings["APP_ID"],
             self._redirect_uri(request),
-            settings.PROVIDERS["FACEBOOK"]["PERMISSIONS"],
+            self.settings["PERMISSIONS"],
         )
 
         return redirect(fb_login_url)
@@ -90,8 +89,8 @@ class FacebookProvider(Provider):
         access_token_data = graph.get_access_token_from_code(
             code,
             self._redirect_uri(request),
-            settings.PROVIDERS["FACEBOOK"]["APP_ID"],
-            settings.PROVIDERS["FACEBOOK"]["APP_SECRET"],
+            self.settings["APP_ID"],
+            self.settings["APP_SECRET"],
         )
 
         config.FACEBOOK_ACCESS_TOKEN = access_token_data["access_token"]

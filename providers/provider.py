@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from django.conf import settings
+
 
 class Provider(ABC):
     NAMESPACE = None
@@ -25,3 +27,7 @@ class Provider(ABC):
 
     def set_active_page(self, **kwargs):
         raise NotImplemented()
+
+    @property
+    def settings(self):
+        return settings.PROVIDERS[self.NAMESPACE.upper()]
