@@ -81,7 +81,11 @@ PROVIDERS = {
         "APP_ID": env("FACEBOOK_APP_ID"),
         "APP_SECRET": env("FACEBOOK_APP_SECRET"),
         "PERMISSIONS": ["manage_pages", "publish_pages"],
-    }
+    },
+    "TWITTER": {
+        "CONSUMER_TOKEN": env("TWITTER_CONSUMER_TOKEN"),
+        "CONSUMER_SECRET": env("TWITTER_CONSUMER_SECRET"),
+    },
 }
 
 CONSTANCE_CONFIG = {
@@ -89,6 +93,8 @@ CONSTANCE_CONFIG = {
     "FACEBOOK_ACCESS_TOKEN_EXPIRES_AT": (datetime.datetime(1990, 1, 1), "Expiry date"),
     "FACEBOOK_ACTIVE_PAGE_ID": (-1, "Active Facebook page"),
     "FACEBOOK_ACTIVE_PAGE_ACCESS_TOKEN": ("", "Active Facebook page access token"),
+    "TWITTER_ACCESS_TOKEN": ("", "Twitter access token"),
+    "TWITTER_ACCESS_TOKEN_SECRET": ("", "Twitter access token secret"),
 }
 
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"

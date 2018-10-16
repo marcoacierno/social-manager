@@ -10,6 +10,7 @@ facebook-sdk = "*"
 django-constance = {version = "*", extras = ["database"]}
 "psycopg2-binary" = "*"
 django-model-utils = "*"
+tweepy = {ref = "master", git = "https://github.com/tweepy/tweepy"}
 
 [dev-packages]
 black = "*"

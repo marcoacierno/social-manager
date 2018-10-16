@@ -11,15 +11,9 @@ class MetadataInline(admin.TabularInline):
 class PostAdmin(admin.ModelAdmin):
     ordering = ("status",)
     list_display = ("title", "status")
-    inlines = []
+    inlines = [MetadataInline]
     fieldsets = (("Post", {"fields": ("title", "content", "status")}),)
     readonly_fields = ("status",)
-
-    def get_fieldsets(self, request, obj=None):
-        if obj.status == Post.STATUS.published:
-            return super().get_fieldsets(request, obj) + [MetadataInline]
-
-        return super().get_fieldsets(request, obj)
 
     def save_form(self, request, form, change):
         if "_publish" in form.data:

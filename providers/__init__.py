@@ -2,11 +2,13 @@ from typing import Dict, List
 
 from .facebook import FacebookProvider
 from .provider import Provider
+from .twitter import TwitterProvider
 
-__all__ = ["FacebookProvider"]
+__all__ = ["FacebookProvider", "TwitterProvider"]
 
 PROVIDERS: Dict[str, Provider] = {}
 PROVIDERS[FacebookProvider.NAMESPACE] = FacebookProvider
+PROVIDERS[TwitterProvider.NAMESPACE] = TwitterProvider
 
 PROVIDERS_INSTANCES = {}
 
