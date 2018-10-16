@@ -98,3 +98,5 @@ CONSTANCE_CONFIG = {
 }
 
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")

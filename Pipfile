@@ -11,6 +11,7 @@ django-constance = {version = "*", extras = ["database"]}
 "psycopg2-binary" = "*"
 django-model-utils = "*"
 tweepy = {ref = "master", git = "https://github.com/tweepy/tweepy"}
+celery = {version = "*", extras = ["redis"]}
 
 [dev-packages]
 black = "*"
