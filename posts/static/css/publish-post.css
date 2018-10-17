@@ -1,0 +1,133 @@
+.publish-post {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.publish-post h1 {
+  font-size: 36px;
+  text-align: center;
+}
+
+.publish-post--tabs--wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.publish-post--tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+  overflow: hidden;
+}
+
+.publish-post--tabs--lamp {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 140px;
+
+  height: 100%;
+
+  background: #79aec8;
+  opacity: 0.5;
+
+  transition: transform 0.4s;
+}
+
+.publish-post--tabs li {
+  position: relative;
+  width: 140px;
+
+  padding: 9px 40px;
+
+  border: 1px solid #000;
+  border-radius: 6px;
+
+  list-style: none;
+  text-align: center;
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+.publish-post--tabs li:not(.active):hover {
+  background: #79aec850;
+}
+
+.publish-post--tabs li:nth-child(2),
+.publish-post--tabs li:nth-child(3) {
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.publish-post--tabs li:last-child,
+.publish-post--tabs li:nth-child(3) {
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.publish-post--preview {
+  margin: 20px 0;
+}
+
+/* facebook post preview */
+
+.publish-post--facebook-post {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 12px 0;
+  border: 1px solid #dddfe2;
+  border-radius: 3px;
+}
+
+.publish-post--facebook-post--author {
+  display: flex;
+}
+
+.publish-post--facebook-post--info {
+  display: flex;
+  flex-direction: column;
+}
+
+.publish-post--facebook-post--info a {
+  color: #365899;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.publish-post--facebook-post--info span {
+  color: #616770;
+  font-size: 12px;
+}
+
+.publish-post--facebook-post--avatar {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+
+  border-radius: 50%;
+
+  background-image: url(https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&h=650&w=940);
+  background-position: center;
+  background-size: cover;
+
+  margin-right: 8px;
+}
+
+.publish-post--facebook-post--post {
+  margin-top: 6px;
+}
+
+/* facebook preview styles */
