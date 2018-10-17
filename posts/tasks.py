@@ -54,4 +54,6 @@ def delete_post_on_social(metadata_id):
     metadata.status = Metadata.STATUS.deleted
     metadata.save()
 
-    logger.info(f"Metadata {metadata_id} of post ID {metadata.post_id} deleted from {metadata.provider_name}0")
+    logger.info(
+        f"Metadata {metadata_id} of post ID {metadata.post_id} deleted from {metadata.provider_name}"
+    )
