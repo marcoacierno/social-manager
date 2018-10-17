@@ -85,7 +85,15 @@ class TwitterProvider(Provider):
 
     def delete_post(self, id):
         api = self._api
-        api.destroy_status(id)
+
+        try:
+            api.destroy_status(id)
+        except tweepy.TweepError as e:
+            # 144 => No status found with that ID. So we can ignore this exception (the post already doesn't exists)
+            if e.api_code == 144:
+                return
+
+            raise
 
     @property
     def active_page(self):
