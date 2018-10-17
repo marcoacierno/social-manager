@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 import facebook
@@ -7,6 +8,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from .provider import Provider
+
+logger = logging.getLogger("social_manager.providers.facebook")
 
 
 class FacebookProvider(Provider):
@@ -63,7 +66,18 @@ class FacebookProvider(Provider):
         return result
 
     def delete_post(self, id):
-        raise NotImplementedError()
+        graph = get_graph_client(True)
+
+        try:
+            graph.delete_object(id)
+        except facebook.GraphAPIError as e:
+            if e.code == 100:
+                logger.exception(
+                    "Unable to delete facebook post, maybe it's already removed?"
+                )
+                return
+
+            raise
 
     def set_active_page(self, **kwargs):
         id = kwargs["page_id"][0]
