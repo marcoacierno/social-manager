@@ -58,7 +58,9 @@ class PostAdmin(admin.ModelAdmin):
                 continue
 
             already_exists = Metadata.objects.filter(
-                post=post, provider_name=provider.NAMESPACE
+                post=post,
+                provider_name=provider.NAMESPACE,
+                status=Metadata.STATUS.created,
             ).exists()
 
             socials.append(
