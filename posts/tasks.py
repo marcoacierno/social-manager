@@ -5,11 +5,12 @@ from django.utils import timezone
 from providers import get_all_providers, get_provider
 from providers.exceptions import SocialProviderException
 from social_manager.celery import app
+from social_manager.error_handler import ErrorHandler
 
 logger = logging.getLogger("social_manager.tasks.posts")
 
 
-@app.task
+@app.task(base=ErrorHandler)
 def publish_post(post_id):
     from .models import Post
 
@@ -32,7 +33,7 @@ def publish_post(post_id):
     logger.info(f"Post {post_id} ({post.title}) published!")
 
 
-@app.task
+@app.task(base=ErrorHandler)
 def delete_post_on_social(metadata_id):
     from .models import Metadata
 
