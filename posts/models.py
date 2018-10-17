@@ -24,9 +24,6 @@ class Post(TimeStampedModel, StatusModel):
         )
 
     def publish(self):
-        if not self.can_publish:
-            return False
-
         self.status = self.STATUS.publishing
         publish_post.delay(self.id)
         return True
