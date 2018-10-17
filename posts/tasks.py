@@ -29,6 +29,8 @@ def publish_post(post_id):
     post.status = Post.STATUS.published
     post.save()
 
+    logger.info(f"Post {post_id} ({post.title}) published!")
+
 
 @app.task
 def delete_post_on_social(metadata_id):
@@ -51,3 +53,5 @@ def delete_post_on_social(metadata_id):
 
     metadata.status = Metadata.STATUS.deleted
     metadata.save()
+
+    logger.info(f"Metadata {metadata_id} of post ID {metadata.post_id} deleted from {metadata.provider_name}0")
