@@ -91,6 +91,9 @@ class TwitterProvider(Provider):
         except tweepy.TweepError as e:
             # 144 => No status found with that ID. So we can ignore this exception (the post already doesn't exists)
             if e.api_code == 144:
+                logger.exception(
+                    f"Unable to delete twitter post ({id}) because it does not exists (error 144)"
+                )
                 return
 
             raise
