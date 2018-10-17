@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+    <h1>You're about to publish "{{post.title}}" 🚀</h1>
+    <h2>This is what the post will look like</h2>
+    <p>{{post.content}}</p>
+
+    <br /><br />
+
+    <table>
+        <thead>
+            <tr>
+                <th>Social</th>
+                <th>Post already exists</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for social in socials %}
+            <tr>
+                <td>{{social.name}}</td>
+                <td>{{social.already_exists|yesno:'Yes,No'}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    <form class="submit-row" method="post">
+        {% csrf_token %}
+        <input type="submit" name="_publish" value="Publish" />
+        <input type="submit" name="_cancel" value="Cancel" />
+    <form>
+{% endblock %}
