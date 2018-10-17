@@ -1,3 +1,5 @@
+import logging
+
 import tweepy
 from constance import config
 from django.contrib import messages
@@ -5,6 +7,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from .provider import Provider
+
+logger = logging.getLogger("social_manager.providers.twitter")
 
 
 class TwitterProvider(Provider):
@@ -34,7 +38,7 @@ class TwitterProvider(Provider):
 
             return redirect(redirect_url)
         except tweepy.TweepError as e:
-            print("unable to fetch authorization url", e)
+            logger.exception("unable to fetch authorization url")
             messages.error(request, "Unable to link Twitter")
             return redirect(reverse("admin:index"))
 
@@ -50,7 +54,7 @@ class TwitterProvider(Provider):
         try:
             auth.get_access_token(oauth_verified)
         except tweepy.TweepError as e:
-            print("unable to get access token", e)
+            logger.exception("unable to get access token")
             messages.error(
                 request, f"Unable to get Twitter access token: {e.reason} {e.api_code}"
             )
