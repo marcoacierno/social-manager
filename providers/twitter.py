@@ -63,16 +63,25 @@ class TwitterProvider(Provider):
         return redirect(reverse("admin:index"))
 
     def publish_post(self, post):
-        api = self._api
-        status = api.update_status(post.content)
+        super().publish_post(post)
 
         from posts.models import Metadata
 
+        api = self._api
+        status = api.update_status(post.content)
+
         Metadata.objects.create(
-            post=post, remote_id=status.id, provider_name=self.NAMESPACE
+            post=post,
+            remote_id=status.id,
+            provider_name=self.NAMESPACE,
+            payload=status._json,
         )
 
         return status
+
+    def delete_post(self, id):
+        api = self._api
+        api.destroy_status(id)
 
     @property
     def active_page(self):
@@ -102,3 +111,7 @@ class TwitterProvider(Provider):
             )
 
         return tweepy.API(auth)
+
+    @property
+    def is_active(self):
+        return bool(config.TWITTER_ACCESS_TOKEN)

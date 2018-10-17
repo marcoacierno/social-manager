@@ -45,8 +45,7 @@ class FacebookProvider(Provider):
         }
 
     def publish_post(self, post):
-        if not config.FACEBOOK_ACTIVE_PAGE_ID:
-            return False
+        super().publish_post(post)
 
         from posts.models import Metadata
 
@@ -56,9 +55,15 @@ class FacebookProvider(Provider):
         )
 
         Metadata.objects.create(
-            post=post, remote_id=result["id"], provider_name=self.NAMESPACE
+            post=post,
+            remote_id=result["id"],
+            provider_name=self.NAMESPACE,
+            payload=result,
         )
         return result
+
+    def delete_post(self, id):
+        raise NotImplementedError()
 
     def set_active_page(self, **kwargs):
         id = kwargs["page_id"][0]
@@ -102,6 +107,10 @@ class FacebookProvider(Provider):
 
         messages.success(request, "Facebook access token set correctly!")
         return redirect(reverse("admin:index"))
+
+    @property
+    def is_active(self):
+        return bool(config.FACEBOOK_ACTIVE_PAGE_ID)
 
     def _redirect_uri(self, request):
         return request.build_absolute_uri(reverse("facebook:redirect"))

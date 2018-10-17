@@ -1,0 +1,2 @@
+class SocialProviderException(Exception):
+    pass

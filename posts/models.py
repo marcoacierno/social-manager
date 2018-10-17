@@ -1,8 +1,9 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from model_utils import Choices
 from model_utils.models import StatusModel, TimeStampedModel
 
-from .tasks import publish_post
+from .tasks import delete_post_on_social, publish_post
 
 
 class Post(TimeStampedModel, StatusModel):
@@ -34,8 +35,23 @@ class Post(TimeStampedModel, StatusModel):
         return f"{self.title} - {self.status}"
 
 
-class Metadata(models.Model):
+class Metadata(StatusModel):
+    STATUS = Choices("created", "deleting", "deleted")
+
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     provider_name = models.CharField(max_length=50)
     remote_id = models.TextField()
+    payload = JSONField()
+
+    def delete(self, *args, **kwargs):
+        if self.status in (Metadata.STATUS.deleting, Metadata.STATUS.deleted):
+            return
+
+        if kwargs.get("delete_locally_only", False):
+            super().delete(*args, **kwargs)
+        else:
+            self.status = Metadata.STATUS.deleting
+            self.save()
+
+            delete_post_on_social.delay(self.id)
