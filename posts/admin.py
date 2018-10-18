@@ -33,6 +33,7 @@ class PostAdminForm(forms.ModelForm):
 class PostAdmin(admin.ModelAdmin):
     ordering = ("status",)
     list_display = ("title", "status")
+    list_filter = ("status",)
     inlines = [MetadataInline]
     fieldsets = (("Post", {"fields": ("title", "content", "status", "scheduled_at")}),)
     readonly_fields = ("status",)
