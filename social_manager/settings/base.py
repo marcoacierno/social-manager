@@ -102,30 +102,26 @@ CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': root('logs/project.log'),
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": root("logs/project.log"),
         },
-        'file_tasks': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': root('logs/tasks.log'),
+        "file_tasks": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": root("logs/tasks.log"),
         },
     },
-    'loggers': {
-        'social_manager.tasks': {
-            'handlers': ['file_tasks'],
-            'level': 'DEBUG',
-            'propagate': False,
+    "loggers": {
+        "social_manager.tasks": {
+            "handlers": ["file_tasks"],
+            "level": "INFO",
+            "propagate": False,
         },
-        'social_manager': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+        "social_manager": {"handlers": ["file"], "level": "DEBUG", "propagate": True},
     },
 }

@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin, messages
 from django.shortcuts import redirect, render
 from django.urls import path, reverse
@@ -14,13 +15,28 @@ class MetadataInline(admin.StackedInline):
         return False
 
 
+class PostAdminForm(forms.ModelForm):
+    def clean(self):
+        if "_schedule" in self.data and not self.cleaned_data["scheduled_at"]:
+            raise forms.ValidationError(
+                "If you want to schedule the post, please insert the date of when it should be published"
+            )
+
+        return super().clean()
+
+    class Meta:
+        model = Post
+        exclude = ()
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     ordering = ("status",)
     list_display = ("title", "status")
     inlines = [MetadataInline]
-    fieldsets = (("Post", {"fields": ("title", "content", "status")}),)
+    fieldsets = (("Post", {"fields": ("title", "content", "status", "scheduled_at")}),)
     readonly_fields = ("status",)
+    form = PostAdminForm
 
     def get_urls(self):
         urls = super().get_urls()
@@ -38,6 +54,12 @@ class PostAdmin(admin.ModelAdmin):
             return redirect(reverse("admin:publish_recap", args=[obj.id]))
 
         return super().response_change(request, obj)
+
+    def save_model(self, request, obj, form, change):
+        if "_schedule" in request.POST:
+            obj.status = Post.STATUS.scheduled
+
+        return super().save_model(request, obj, form, change)
 
     def publish_recap(self, request, object_id):
         post = Post.objects.get(id=object_id)

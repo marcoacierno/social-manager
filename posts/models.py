@@ -25,6 +25,8 @@ class Post(TimeStampedModel, StatusModel):
 
     def publish(self):
         self.status = self.STATUS.publishing
+        self.save()
+
         publish_post.delay(self.id)
         return True
 
