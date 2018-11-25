@@ -22,7 +22,7 @@
             {% for provider, instance in providers.items %}
             <tr>
                 <th scope="row">
-                    <a href="{% url 'provider-index' slug=provider %}">{{provider}}</a>
+                    <a style="text-transform: capitalize;" href="{% url 'provider-index' slug=provider %}">{{provider}}</a>
                 </th>
                 {% if not instance.is_active %}
                     {% with provider|add:':authenticate' as authenticate_url %}
