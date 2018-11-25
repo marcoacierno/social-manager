@@ -19,17 +19,25 @@
                 <span class="section">Providers</span>
             </caption>
 
-            {% for provider in providers %}
-                <tr>
-                    <th scope="row">
-                        <a href="{% url 'provider-index' slug=provider %}">{{provider}}</a>
-                    </th>
+            {% for provider, instance in providers.items %}
+            <tr>
+                <th scope="row">
+                    <a href="{% url 'provider-index' slug=provider %}">{{provider}}</a>
+                </th>
+                {% if not instance.is_active %}
                     {% with provider|add:':authenticate' as authenticate_url %}
-                    <td>
-                        <a href="{% url authenticate_url %}">Link</a>
-                    </td>
+                        <td>
+                            <a href="{% url authenticate_url %}">Link</a>
+                        </td>
                     {% endwith %}
-                </tr>
+                {% else %}
+                    <td>
+                        {% with provider|add:':deauthenticate' as deauthenticate_url %}
+                            <a href="{% url deauthenticate_url %}">Unlink</a>
+                        {% endwith %}
+                    </td>
+                {% endif %}
+            </tr>
             {% endfor %}
         </table>
     </div>

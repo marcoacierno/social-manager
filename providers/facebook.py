@@ -37,11 +37,19 @@ class FacebookProvider(Provider):
                 "callback": self.authenticate,
                 "name": "authenticate",
             },
+            {
+                "path": "deauthenticate/",
+                "callback": self.deauthenticate,
+                "name": "deauthenticate",
+            },
             {"path": "redirect/", "callback": self.redirect, "name": "redirect"},
         ]
 
     @property
     def active_page(self):
+        if not config.FACEBOOK_ACTIVE_PAGE_ID:
+            return None
+
         return {
             "id": config.FACEBOOK_ACTIVE_PAGE_ID,
             "access_token": config.FACEBOOK_ACTIVE_PAGE_ACCESS_TOKEN,
@@ -124,7 +132,37 @@ class FacebookProvider(Provider):
 
     @property
     def is_active(self):
-        return bool(config.FACEBOOK_ACTIVE_PAGE_ID)
+        return config.FACEBOOK_ACTIVE_PAGE_ID != -1
+
+    def deauthenticate(self, request, **kwargs):
+        super().deauthenticate()
+        graph = get_graph_client(False)
+
+        success = False
+        try:
+            success = graph.request("/me/permissions", method="DELETE")
+            success = success["success"]
+        except facebook.GraphAPIError as e:
+            if (
+                e.code == 190
+                and "Error validating access token: The user has not authorized application"
+                in e.message
+            ):
+                # if the user already has deauthorizated the app via facebook panel for example
+                # we simply ignore the error and reset the saved values
+                success = True
+            else:
+                raise
+
+        if success:
+            config.FACEBOOK_ACCESS_TOKEN = ""
+            config.FACEBOOK_ACTIVE_PAGE_ID = -1
+            config.FACEBOOK_ACTIVE_PAGE_ACCESS_TOKEN = ""
+            messages.success(request, "Facebook settings resetted correctly!")
+            return redirect(reverse("admin:index"))
+
+        messages.error(request, "Unable to unlink your facebook account")
+        return redirect(reverse("admin:index"))
 
     def _redirect_uri(self, request):
         return request.build_absolute_uri(reverse("facebook:redirect"))

@@ -22,6 +22,11 @@ class TwitterProvider(Provider):
                 "callback": self.authenticate,
                 "name": "authenticate",
             },
+            {
+                "path": "deauthenticate/",
+                "callback": self.deauthenticate,
+                "name": "deauthenticate",
+            },
             {"path": "callback/", "callback": self.callback, "name": "callback"},
         ]
 
@@ -100,6 +105,9 @@ class TwitterProvider(Provider):
 
     @property
     def active_page(self):
+        if not config.TWITTER_ACCESS_TOKEN:
+            return None
+
         return {
             "id": None,
             "access_token": config.TWITTER_ACCESS_TOKEN,
@@ -130,3 +138,10 @@ class TwitterProvider(Provider):
     @property
     def is_active(self):
         return bool(config.TWITTER_ACCESS_TOKEN)
+
+    def deauthenticate(self, request, *args, **kwargs):
+        config.TWITTER_ACCESS_TOKEN = ""
+        config.TWITTER_ACCESS_TOKEN_SECRET = ""
+
+        messages.success(request, "Twitter settings resetted correctly!")
+        return redirect(reverse("admin:index"))

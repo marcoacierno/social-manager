@@ -45,6 +45,13 @@ class Provider(ABC):
         if not self.is_active:
             raise SocialProviderException(f"Provider {self.NAMESPACE} not active")
 
+    @abstractmethod
+    def deauthenticate(self):
+        if not self.is_active:
+            raise SocialProviderException(
+                f"Provider {self.NAMESPACE} not authenticated"
+            )
+
     def set_active_page(self, **kwargs):
         raise NotImplemented()
 
