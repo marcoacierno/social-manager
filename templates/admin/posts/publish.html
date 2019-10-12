@@ -1,10 +1,40 @@
 {% extends "admin/base_site.html" %}
-{% block content %}
-    <h1>You're about to publish "{{post.title}}" 🚀</h1>
-    <h2>This is what the post will look like</h2>
-    <p>{{post.content}}</p>
+{% load static %}
 
-    <br /><br />
+{% block extrahead %}
+    <script type="text/javascript" src="{% static 'js/publish-post.js' %}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static 'css/publish-post.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="publish-post">
+    <h1>You're about to publish "{{post.title}}" 🚀</h1>
+    <div class="publish-post--tabs--wrapper">
+        <ul class="publish-post--tabs">
+            <span class="publish-post--tabs--lamp"></span>
+            <li data-preview-type="fb" data-index="0" class="active">Facebook</li>
+            <li data-preview-type="tw" data-index="1">Twitter</li>
+            <li data-preview-type="ig" data-index="2">Instagram</li>
+        </ul>
+    </div>
+
+    <div class="publish-post--preview">
+        <div class="publish-post--facebook-post">
+            <div class="publish-post--facebook-post--author">
+                <span class="publish-post--facebook-post--avatar"></span>
+                <div class="publish-post--facebook-post--info">
+                    <a>Aurora Borealis Observatory - Visit Senja</a>
+                    <span>Soon!</span>
+                </div>
+            </div>
+            <div class="publish-post--facebook-post--post">
+                {{post.content|linebreaks}}
+            </div>
+        </div>
+    </div>
+
+    <template id="preview--facebook">
+    </template>
 
     <table>
         <thead>
@@ -28,4 +58,5 @@
         <input type="submit" name="_publish" value="Publish" />
         <input type="submit" name="_cancel" value="Cancel" />
     <form>
+</div>
 {% endblock %}
